@@ -8,7 +8,7 @@ A Blender Add-on that enables importing vehicles as a Need for Speed II (1997) (
 - [Wahooney's Collection Custom Properties Panel](https://www.dropbox.com/s/16obllozlbueqhk/wahooney_custom_properties_collection.py)
 
 ## Installation
-Go to `Edit > Preferences > Addons > Install` and either select .zip file or the unzipped `import_nfshs_ps1_models.py` file.
+Go to `Edit > Preferences > Addons > Install` and either select .zip file or the unzipped `import_nfs2_models.py` file.
 
 ## Location
 `File > Import > Need for Speed II (1997) (.geo)`
