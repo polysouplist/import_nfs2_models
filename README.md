@@ -1,4 +1,4 @@
-# Need for Need for Speed II (1997) (.geo) importer
+# Need for Speed II (1997) (.geo) importer
 [![Blender](https://img.shields.io/badge/Blender-v3.6_LTS-blue?logo=blender&logoColor=white)](https://www.blender.org/download/lts/3-6/#versions "Download Blender")
 
 A Blender Add-on that enables importing vehicles as a Need for Speed II (1997) (.geo) file.
