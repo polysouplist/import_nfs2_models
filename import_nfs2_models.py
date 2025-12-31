@@ -152,7 +152,6 @@ def import_nfs2_models(context, file_path, clear_scene, m):
 					if BMFace.index != -1:
 						BMFace = BMFace.copy(verts=False, edges=False)
 					BMFace.index = i
-					BMFace.smooth = True
 					BMFace[face_unk0] = unk0
 					BMFace[is_triangle] = mapping[0][1]
 					BMFace[uv_flip] = mapping[1][1]
@@ -185,8 +184,8 @@ def import_nfs2_models(context, file_path, clear_scene, m):
 				bm.free()
 				
 				obj["object_index"] = index
-				obj["object_unk0"] = object_unk0
-				obj["object_unk1"] = object_unk1
+				obj["object_unk0"] = int_to_id(object_unk0)
+				obj["object_unk1"] = int_to_id(object_unk1)
 				main_collection.objects.link(obj)
 				bpy.context.view_layer.objects.active = obj
 				obj.matrix_world = m @ Matrix.Translation(pos)
@@ -259,7 +258,7 @@ def mapping_decode(mapping, endian):
 	# Step 3: Split the bits according to specified offsets and lengths and convert them to integers
 	mapping = int(binary_str[0:8], 2)      # Offset 0, length 8
 	
-	# Step 4: Unpack the flags using bit shifts
+	# Step 4: Unpack the mapping using bit shifts
 	mapping_names = [
 		"is_triangle",			# Bit 0
 		"uv_flip",				# Bit 1
@@ -267,12 +266,12 @@ def mapping_decode(mapping, endian):
 		"double_sided"			# Bit 3
 	]
 	
-	# Extracting each flag's state
+	# Extracting each mapping's state
 	mapping_values = [(mapping >> i) & 1 for i in range(4)]
 	
 	mapping = [(name, value) for name, value in zip(mapping_names, mapping_values)]
 	
-	## Keeping only the used flags (those with value 1)
+	## Keeping only the used mapping (those with value 1)
 	#used_mapping = [(name, value) for name, value in zip(mapping_names, mapping_values) if value == 1]
 	
 	return(mapping)
