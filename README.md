@@ -8,7 +8,7 @@ A Blender Add-on that enables importing and exporting vehicles as a Need for Spe
 - [Wahooney's Collection Custom Properties Panel](https://www.dropbox.com/s/16obllozlbueqhk/wahooney_custom_properties_collection.py)
 
 ## Installation
-Go to `Edit > Preferences > Addons > Install` and either select .zip file or the unzipped `import_nfs2_models.py`, `export_nfs2_models.py` files.
+Go to `Edit > Preferences > Addons > Install` and either select .zip file or the unzipped `import_nfs2_models.py`, `create_mapping_data_panel.py` and `export_nfs2_models.py` files.
 
 ## Location
 `File > Import > Need for Speed II (1997) (.geo)`
