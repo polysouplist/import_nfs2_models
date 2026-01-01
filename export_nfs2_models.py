@@ -22,7 +22,8 @@ import bpy
 from bpy.types import Operator
 from bpy.props import (
 	StringProperty,
-	BoolProperty
+	BoolProperty,
+	EnumProperty
 )
 from bpy_extras.io_utils import (
 	ExportHelper,
@@ -38,7 +39,7 @@ import struct
 import numpy as np
 
 
-def main(context, export_path, m):
+def main(context, export_path, game_version, m):
 	os.system('cls')
 	start_time = time.time()
 	
@@ -131,7 +132,10 @@ def main(context, export_path, m):
 									round(vert.co[2]*0x7F)]
 						f.write(struct.pack('<3h', *vertices))
 					if len(mesh.vertices) % 2 == 1:	#Data offset, happens when num_vrtx is odd
-						f.write(b'\x00' * 0x6)
+						if game_version == "NFS2":
+							f.write(b'\x42\x45\x4E\x44' + b'\x00' * 0x2)
+						else:
+							f.write(b'\x00' * 0x6)
 					
 					face_unk0 = bm.faces.layers.int.get("face_unk0")
 					is_triangle = bm.faces.layers.int.get("is_triangle")
@@ -241,6 +245,14 @@ class ExportNFS2(Operator, ExportHelper):
 			default="*.geo",
 			maxlen=255,
 			)
+	
+	game_version: EnumProperty(
+		name="Game version",
+		description="Choose the resource version you want to load",
+		items=(('OPT_A', "NFS2", "Need for Speed II"),
+			   ('OPT_B', "NFS2SE", "Need for Speed II: Special Edition")),
+		default='OPT_A',
+		)
 
 	
 	def execute(self, context):
@@ -251,7 +263,7 @@ class ExportNFS2(Operator, ExportHelper):
 		
 		global_matrix = axis_conversion(from_forward='Z', from_up='Y', to_forward=self.axis_forward, to_up=self.axis_up).to_4x4()
 		
-		status = main(context, self.filepath, global_matrix)
+		status = main(context, self.filepath, self.game_version, global_matrix)
 		
 		if status == {"CANCELLED"}:
 			self.report({"ERROR"}, "Exporting has been cancelled. Check the system console for information.")
@@ -264,6 +276,14 @@ class ExportNFS2(Operator, ExportHelper):
 		
 		sfile = context.space_data
 		operator = sfile.active_operator
+		
+		##
+		box = layout.box()
+		split = box.split(factor=0.75)
+		col = split.column(align=True)
+		col.label(text="Settings", icon="SETTINGS")
+		
+		box.prop(operator, "game_version")
 		
 		##
 		box = layout.box()
