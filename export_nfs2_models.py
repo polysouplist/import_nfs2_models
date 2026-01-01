@@ -138,28 +138,33 @@ def main(context, export_path, m):
 					uv_flip = bm.faces.layers.int.get("uv_flip")
 					flip_normal = bm.faces.layers.int.get("flip_normal")
 					double_sided = bm.faces.layers.int.get("double_sided")
+					unknown_4 = bm.faces.layers.int.get("unknown_4")
+					unknown_5 = bm.faces.layers.int.get("unknown_5")
+					unknown_6 = bm.faces.layers.int.get("unknown_6")
+					unknown_7 = bm.faces.layers.int.get("unknown_7")
 					
 					for face in bm.faces:
-						mapping = [face[is_triangle], face[uv_flip], face[flip_normal], face[double_sided]]
-						mapping = mapping_encode(mapping, "little")
-						unk0 = face[face_unk0].to_bytes(3, "little")
 						if len(face.verts) > 4 or len(face.verts) < 3:
 							print("ERROR: non triangular or quad face on mesh %s." % mesh.name)
 							return {"CANCELLED"}
-						if face[flip_normal] == 1:
-							if len(face.verts) == 3:
-								vert = face.verts
+						if len(face.verts) == 3:
+							face[is_triangle] = 1
+							vert = face.verts
+							if face[flip_normal] == 1:
 								vertex_indices = [vert[0].index, vert[2].index, vert[1].index, vert[1].index]
-							elif len(face.verts) == 4:
-								vert = face.verts
-								vertex_indices = [vert[0].index, vert[3].index, vert[2].index, vert[1].index]
-						else:
-							if len(face.verts) == 3:
-								vert = face.verts
+							else:
 								vertex_indices = [vert[0].index, vert[1].index, vert[2].index, vert[2].index]
-							elif len(face.verts) == 4:
-								vert = face.verts
+						elif len(face.verts) == 4:
+							face[is_triangle] = 0
+							vert = face.verts
+							if face[flip_normal] == 1:
+								vertex_indices = [vert[0].index, vert[3].index, vert[2].index, vert[1].index]
+							else:
 								vertex_indices = [vert[0].index, vert[1].index, vert[2].index, vert[3].index]
+						
+						mapping = [face[is_triangle], face[uv_flip], face[flip_normal], face[double_sided], face[unknown_4], face[unknown_5], face[unknown_6], face[unknown_7]]
+						mapping = mapping_encode(mapping, "little")
+						unk0 = face[face_unk0].to_bytes(3, "little")
 						material_name = mesh.materials[face.material_index].name
 						texture_name = material_name[:4]
 						f.write(mapping)
@@ -189,7 +194,8 @@ def mapping_encode(mapping, endian):
 	# Step 1: Pack mapping into a 8-bit integer
 	mapping_value = 0
 	mapping_names = [
-	"is_triangle", "uv_flip", "flip_normal", "double_sided"
+	"is_triangle", "uv_flip", "flip_normal", "double_sided",
+	"unknown_4", "unknown_5", "unknown_6", "unknown_7"
 	]
 	
 	# Set the corresponding mapping bits
@@ -199,7 +205,7 @@ def mapping_encode(mapping, endian):
 	
 	# Step 2: Pack everything into a 8-bit integer using bit shifting
 	packed_value = (
-		(mapping_value & 0xF)            # 4 bits for mapping
+		(mapping_value & 0xFF)            # 4 bits for mapping
 	)
 	
 	# Step 3: Convert the packed 8-bit integer to a 1-byte sequence
