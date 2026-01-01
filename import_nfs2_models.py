@@ -5,17 +5,17 @@
 
 
 bl_info = {
-    "name": "Import Need for Speed II (1997) models format (.geo)",
-    "description": "Import meshes files from Need for Speed II (1997)",
-    "author": "PolySoupList",
-    "version": (1, 0, 0),
-    "blender": (3, 6, 23),
-    "location": "File > Import > Need for Speed II (1997) (.geo)",
-    "warning": "",
-    "wiki_url": "",
-    "tracker_url": "",
-    "support": "COMMUNITY",
-    "category": "Import-Export"}
+	"name": "Import Need for Speed II (1997) models format (.geo)",
+	"description": "Import meshes files from Need for Speed II (1997)",
+	"author": "PolySoupList",
+	"version": (1, 0, 0),
+	"blender": (3, 6, 23),
+	"location": "File > Import > Need for Speed II (1997) (.geo)",
+	"warning": "",
+	"wiki_url": "",
+	"tracker_url": "",
+	"support": "COMMUNITY",
+	"category": "Import-Export"}
 
 
 import bpy
@@ -121,6 +121,10 @@ def import_nfs2_models(context, file_path, clear_scene, m):
 				uv_flip = (bm.faces.layers.int.get("uv_flip") or bm.faces.layers.int.new("uv_flip"))
 				flip_normal = (bm.faces.layers.int.get("flip_normal") or bm.faces.layers.int.new("flip_normal"))
 				double_sided = (bm.faces.layers.int.get("double_sided") or bm.faces.layers.int.new("double_sided"))
+				unknown_4 = (bm.faces.layers.int.get("unknown_4") or bm.faces.layers.int.new("unknown_4"))
+				unknown_5 = (bm.faces.layers.int.get("unknown_5") or bm.faces.layers.int.new("unknown_5"))
+				unknown_6 = (bm.faces.layers.int.get("unknown_6") or bm.faces.layers.int.new("unknown_6"))
+				unknown_7 = (bm.faces.layers.int.get("unknown_7") or bm.faces.layers.int.new("unknown_7"))
 				
 				BMVert_dictionary = {}
 				
@@ -157,6 +161,10 @@ def import_nfs2_models(context, file_path, clear_scene, m):
 					BMFace[uv_flip] = mapping[1][1]
 					BMFace[flip_normal] = mapping[2][1]
 					BMFace[double_sided] = mapping[3][1]
+					BMFace[unknown_4] = mapping[4][1]
+					BMFace[unknown_5] = mapping[5][1]
+					BMFace[unknown_6] = mapping[6][1]
+					BMFace[unknown_7] = mapping[7][1]
 					
 					material_name = str(texture_name, 'ascii')
 					mat = bpy.data.materials.get(material_name)
@@ -210,40 +218,40 @@ def import_nfs2_models(context, file_path, clear_scene, m):
 
 
 def get_geoPartNames(index):
-    geoPartNames = {0: "High-Poly Additional Body Part",
-                    1: "High-Poly Main Body Part",
-                    2: "High-Poly Ground Part",
-                    3: "High-Poly Front Part",
-                    4: "High-Poly Back Part",
-                    5: "High-Poly Left Side Part",
-                    6: "High-Poly Right Side Part",
-                    7: "High-Poly Additional Left Side Part",
-                    8: "High-Poly Additional Right Side Part",
-                    9: "High-Poly Spoiler Part",
-                    10: "High-Poly Additional Part",
-                    11: "High-Poly Backlights",
-                    12: "High-Poly Front Right Wheel",
-                    13: "High-Poly Front Right Wheel Part",
-                    14: "High-Poly Front Left Wheel",
-                    15: "High-Poly Front Left Wheel Part",
-                    16: "High-Poly Rear Right Wheel",
-                    17: "High-Poly Rear Right Wheel Part",
-                    18: "High-Poly Rear Left Wheel",
-                    19: "High-Poly Rear Left Wheel Part",
-                    20: "Medium-Poly Additional Body Part",
-                    21: "Medium-Poly Main Body Part",
-                    22: "Medium-Poly Ground Part",
-                    23: "Low-Poly Wheel Part",
-                    24: "Low-Poly Main Part",
-                    25: "Low-Poly Side Part",
-                    26: "Reserved space for part",
-                    27: "Reserved space for part",
-                    28: "Reserved space for part",
-                    29: "Reserved space for part",
-                    30: "Reserved space for part",
-                    31: "Reserved space for part"}
-    
-    return geoPartNames[index]
+	geoPartNames = {0: "High-Poly Additional Body Part",
+					1: "High-Poly Main Body Part",
+					2: "High-Poly Ground Part",
+					3: "High-Poly Front Part",
+					4: "High-Poly Back Part",
+					5: "High-Poly Left Side Part",
+					6: "High-Poly Right Side Part",
+					7: "High-Poly Additional Left Side Part",
+					8: "High-Poly Additional Right Side Part",
+					9: "High-Poly Spoiler Part",
+					10: "High-Poly Additional Part",
+					11: "High-Poly Backlights",
+					12: "High-Poly Front Right Wheel",
+					13: "High-Poly Front Right Wheel Part",
+					14: "High-Poly Front Left Wheel",
+					15: "High-Poly Front Left Wheel Part",
+					16: "High-Poly Rear Right Wheel",
+					17: "High-Poly Rear Right Wheel Part",
+					18: "High-Poly Rear Left Wheel",
+					19: "High-Poly Rear Left Wheel Part",
+					20: "Medium-Poly Additional Body Part",
+					21: "Medium-Poly Main Body Part",
+					22: "Medium-Poly Ground Part",
+					23: "Low-Poly Wheel Part",
+					24: "Low-Poly Main Part",
+					25: "Low-Poly Side Part",
+					26: "Reserved space for part",
+					27: "Reserved space for part",
+					28: "Reserved space for part",
+					29: "Reserved space for part",
+					30: "Reserved space for part",
+					31: "Reserved space for part"}
+	
+	return geoPartNames[index]
 
 
 def mapping_decode(mapping, endian):
@@ -263,11 +271,15 @@ def mapping_decode(mapping, endian):
 		"is_triangle",			# Bit 0
 		"uv_flip",				# Bit 1
 		"flip_normal",			# Bit 2
-		"double_sided"			# Bit 3
+		"double_sided",			# Bit 3
+		"unknown_4",			# Bit 4
+		"unknown_5",			# Bit 5
+		"unknown_6",			# Bit 6
+		"unknown_7"				# Bit 7
 	]
 	
 	# Extracting each mapping's state
-	mapping_values = [(mapping >> i) & 1 for i in range(4)]
+	mapping_values = [(mapping >> i) & 1 for i in range(8)]
 	
 	mapping = [(name, value) for name, value in zip(mapping_names, mapping_values)]
 	
