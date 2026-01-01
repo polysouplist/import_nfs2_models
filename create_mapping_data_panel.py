@@ -323,7 +323,7 @@ def register():
 	bpy.types.Mesh.face_unk0 = bpy.props.IntProperty(name="Face Unk 0", description="Face Unk 0", min=-8388608, max=8388607, get=get_int_face_unk0, set=set_int_face_unk0)
 	
 	bpy.types.Mesh.is_triangle = bpy.props.BoolProperty(name="is_triangle", description="Is triangle?", default=True, get=get_int_is_triangle, set=set_int_is_triangle)
-	bpy.types.Mesh.is_road = bpy.props.BoolProperty(name="uv_flip", description="Uv flip?", default=False, get=get_int_uv_flip, set=set_int_uv_flip)
+	bpy.types.Mesh.uv_flip = bpy.props.BoolProperty(name="uv_flip", description="Uv flip?", default=False, get=get_int_uv_flip, set=set_int_uv_flip)
 	bpy.types.Mesh.flip_normal = bpy.props.BoolProperty(name="flip_normal", description="Flip normal?", default=False, get=get_int_flip_normal, set=set_int_flip_normal)
 	bpy.types.Mesh.double_sided = bpy.props.BoolProperty(name="double_sided", description="Double sided?", default=False, get=get_int_double_sided, set=set_int_double_sided)
 	bpy.types.Mesh.unknown_4 = bpy.props.BoolProperty(name="unknown_4", description="Unknown 4?", default=False, get=get_int_unknown_4, set=set_int_unknown_4)
